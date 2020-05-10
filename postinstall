@@ -1,0 +1,52 @@
+#!/bin/sh
+
+set -e
+
+# empty message of the day.
+echo -n > /etc/motd
+
+# members of `sudo` group are not asked for password.
+sed -i 's/^%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
+
+# new users should be put into the "users" group
+sed -i 's/^USERGROUPS=yes/USERGROUPS=no/' /etc/adduser.conf
+
+# fix the time server configuration
+sed -i 's/^#NTP=/NTP=time.u.washington.edu/' /etc/systemd/timesyncd.conf
+
+# remove some unused packages
+DEBIAN_FRONTEND=noninteractive apt-get purge -y laptop-detect tasksel emacsen-common ienglish-common ispell
+
+# install some additional packages
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends sudo time openssl gnutls-bin zip unzip bzip2 lynx vim vim-scripts curl whois patch telnet sqlite3 strace lsof less screen rsync git git-lfs dos2unix myrepos traceroute bash-completion socat busybox psmisc man linux-headers-$(uname -r) dnsutils fuse net-tools acct whowatch sysstat parted unattended-upgrades apt-listchanges aptitude apt-transport-https gnupg-agent gnupg software-properties-common tcpdump
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends glances python3-netifaces python3-docker
+
+# unpack the postinstall tar file
+tar -z -x -C /tmp -f /tmp/postinstall.tar.gz
+
+# install global things and root things
+mkdir -m700 -p /root/.ssh
+cp /tmp/postinstall.d/resolv.conf /etc/resolv.conf
+cp /tmp/postinstall.d/apt.conf.d/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
+cp /tmp/postinstall.d/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/20auto-upgrades
+cp /tmp/postinstall.d/vimrc /root/.vimrc
+cp /tmp/postinstall.d/bash_login /root/.bash_login
+
+# add our sudoers file for paul
+cp /tmp/postinstall.d/sudoers /etc/sudoers.d/paul
+chmod 400 /etc/sudoers.d/paul
+
+# install ssh keys and other things for paul user
+mkdir -m700 -p /home/paul/.ssh
+cp /tmp/postinstall.d/authorized_keys /home/paul/.ssh/authorized_keys
+cp /tmp/postinstall.d/vimrc /home/paul/.vimrc
+cp /tmp/postinstall.d/bash_login /home/paul/.bash_login
+
+# fix permissions on root home directory
+chmod 700 /root
+chmod 600 /root/.bash_login
+
+# fix permissions on paul home directory
+chown -R paul:paul /home/paul
+chmod 700 /home/paul
+chmod 600 /home/paul/.bash_login /home/paul/.ssh/authorized_keys

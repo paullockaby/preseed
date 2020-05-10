@@ -1,0 +1,56 @@
+#!/bin/sh
+
+set -e
+
+CONFIGURATION=$1
+INPUTFILE=$2
+OUTPUTFILE=$3
+
+if test -z "$CONFIGURATION"
+then
+    echo "missing configuration file -- first argument should be a preseed configuration file"
+    exit 1
+fi
+if test -z "$INPUTFILE"
+then
+    echo "missing input file -- second argument should be a debian ISO file"
+    exit 1
+fi
+if test -z "$OUTPUTFILE"
+then
+    echo "missing output file -- third argument should be the name of a new debian ISO file"
+    exit 1
+fi
+
+CURDIR="$(dirname $0)"
+
+ISO_FILES="$(mktemp -d)"
+POSTINSTALL_FILES="$(mktemp -d)"
+CONFIGURATION_FILES="$(mktemp -d)"
+
+xorriso -osirrox on -indev $INPUTFILE -extract / $ISO_FILES
+
+chmod +w -R $ISO_FILES/install.amd/
+gunzip $ISO_FILES/install.amd/initrd.gz
+
+# contains all of the files that we want on the remote system
+tar -c -z -f $CONFIGURATION_FILES/postinstall.tar.gz -C $CURDIR postinstall.d
+
+# now add these all to the initrd file
+cp $CONFIGURATION $CONFIGURATION_FILES/preseed.cfg
+(cd $CONFIGURATION_FILES; echo preseed.cfg | cpio -H newc -o -A -F $ISO_FILES/install.amd/initrd)
+(cd $CONFIGURATION_FILES; echo postinstall.tar.gz | cpio -H newc -o -A -F $ISO_FILES/install.amd/initrd)
+echo postinstall | cpio -H newc -o -A -F $ISO_FILES/install.amd/initrd
+
+gzip $ISO_FILES/install.amd/initrd
+chmod -w -R $ISO_FILES/install.amd/
+
+chmod +w $ISO_FILES/md5sum.txt
+(cd $ISO_FILES; md5sum `find -follow -type f` > md5sum.txt)
+chmod -w $ISO_FILES/md5sum.txt
+
+xorriso -as mkisofs -o $OUTPUTFILE -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -c isolinux/boot.cat -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -isohybrid-gpt-basdat $ISO_FILES
+
+chmod +w -R $ISO_FILES
+rm -rf $ISO_FILES
+rm -rf $CONFIGURATION_FILES

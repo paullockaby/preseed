@@ -1,0 +1,1 @@
+paul ALL=(ALL:ALL) NOPASSWD:ALL
