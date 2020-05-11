@@ -12,7 +12,7 @@ sed -i 's/^%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sud
 sed -i 's/^USERGROUPS=yes/USERGROUPS=no/' /etc/adduser.conf
 
 # fix the time server configuration
-sed -i 's/^#NTP=/NTP=time.u.washington.edu/' /etc/systemd/timesyncd.conf
+sed -i 's/^#NTP=/NTP=us.pool.ntp.org/' /etc/systemd/timesyncd.conf
 
 # remove some unused packages
 DEBIAN_FRONTEND=noninteractive apt-get purge -y laptop-detect tasksel emacsen-common ienglish-common ispell
