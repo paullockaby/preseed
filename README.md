@@ -41,6 +41,16 @@ Note that the preseed.cfg file has no password for logging in as the "paul" user
 
 Use this ISO just like you would any other install ISO. A preseeded ISO file can build baremetal systems or virtual machines. It is only useful for on-premise instances and is not useful for cloud instances.
 
+# Building a USB Boot Disk on macOS
+
+I'm always having to look this up so here are the steps.
+
+1. Unmount the disk where `diskXX` is your USB disk: `diskutil unmountDisk /dev/diskXX`
+2. Convert the ISO file into a DMG file: `hdiutil convert -format UDRW -o preseed ./preseed.iso`
+3. Write the DMG file to your USB disk: `sudo dd if=./preseed.dmg of=/dev/diskXX bs=1m`
+
+Your thumb drive is now bootable.
+
 # More Information
 
 These links are where I got most of the information for building this preseed script.
