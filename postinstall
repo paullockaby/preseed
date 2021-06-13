@@ -18,7 +18,7 @@ sed -i 's/^#NTP=/NTP=us.pool.ntp.org/' /etc/systemd/timesyncd.conf
 DEBIAN_FRONTEND=noninteractive apt-get purge -y laptop-detect tasksel emacsen-common ienglish-common ispell
 
 # install some additional packages
-DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cowsay openssh-server sudo xfsprogs time openssl gnutls-bin zip unzip bzip2 lynx vim vim-scripts curl whois patch telnet sqlite3 strace lsof less screen rsync git git-lfs dos2unix myrepos traceroute bash-completion socat busybox psmisc man-db linux-headers-amd64 bind9-dnsutils fuse whowatch unattended-upgrades gpg-agent gnupg software-properties-common tcpdump make gzrt jq bash zsh htop pigz acl glances python3-psutil python3-docker python3-venv python3-pip python3-setuptools python3-wheel
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends sudo time openssl gnutls-bin zip unzip bzip2 lynx vim vim-scripts curl whois patch telnet sqlite3 strace lsof less screen rsync git git-lfs dos2unix myrepos traceroute bash-completion socat busybox psmisc man linux-headers-amd64 dnsutils fuse net-tools acct whowatch sysstat parted unattended-upgrades apt-listchanges aptitude apt-transport-https gnupg-agent gnupg software-properties-common tcpdump make gzrt jq zsh htop glances python3-netifaces python3-docker
 
 # unpack the postinstall tar file
 tar -z -x -C /tmp -f /tmp/postinstall.tar.gz
