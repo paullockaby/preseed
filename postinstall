@@ -9,7 +9,7 @@ echo -n > /etc/motd
 DEBIAN_FRONTEND=noninteractive apt-get purge -y laptop-detect tasksel emacsen-common ienglish-common ispell
 
 # install some additional packages
-DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cowsay openssh-server sudo xfsprogs time openssl gnutls-bin zip unzip bzip2 lynx vim vim-scripts curl whois net-tools patch telnet sqlite3 strace lsof less screen rsync git git-lfs dos2unix myrepos traceroute bash-completion socat busybox psmisc man-db linux-headers-amd64 dnsutils whowatch unattended-upgrades gpg-agent gnupg software-properties-common tcpdump make gzrt jq bash zsh htop pigz dbus-user-session fuse3 acl python3-venv python3-pip python3-setuptools python3-wheel
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cowsay openssh-server sudo xfsprogs time openssl gnutls-bin zip unzip bzip2 lynx vim vim-scripts curl whois net-tools patch telnet sqlite3 strace lsof less screen rsync git git-lfs dos2unix myrepos traceroute bash-completion socat busybox psmisc man-db linux-headers-amd64 dnsutils whowatch unattended-upgrades gpg-agent gnupg software-properties-common tcpdump make gzrt jq bash zsh htop pigz dbus-user-session fuse3 acl python3-venv python3-pip python3-setuptools python3-wheel python3-psutil
 
 # members of `sudo` group are not asked for password.
 sed -i 's/^%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
