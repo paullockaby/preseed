@@ -2,23 +2,17 @@
 
 set -e
 
-CONFIGURATION=$1
-INPUTFILE=$2
-OUTPUTFILE=$3
+INPUTFILE=$1
+OUTPUTFILE=$2
 
-if test -z "$CONFIGURATION"
-then
-    echo "missing configuration file -- first argument should be a preseed configuration file"
-    exit 1
-fi
 if test -z "$INPUTFILE"
 then
-    echo "missing input file -- second argument should be a debian ISO file"
+    echo "missing input file -- first argument should be a debian ISO file"
     exit 1
 fi
 if test -z "$OUTPUTFILE"
 then
-    echo "missing output file -- third argument should be the name of a new debian ISO file"
+    echo "missing output file -- second argument should be the name of a new preseed ISO file"
     exit 1
 fi
 
@@ -37,7 +31,7 @@ gunzip $ISO_FILES/install.amd/initrd.gz
 tar -c -z -f $CONFIGURATION_FILES/postinstall.tar.gz -C $CURDIR postinstall.d
 
 # now add these all to the initrd file
-cp $CONFIGURATION $CONFIGURATION_FILES/preseed.cfg
+cp $CURDIR/preseed.cfg $CONFIGURATION_FILES/preseed.cfg
 (cd $CONFIGURATION_FILES; echo preseed.cfg | cpio -H newc -o -A -F $ISO_FILES/install.amd/initrd)
 (cd $CONFIGURATION_FILES; echo postinstall.tar.gz | cpio -H newc -o -A -F $ISO_FILES/install.amd/initrd)
 echo postinstall | cpio -H newc -o -A -F $ISO_FILES/install.amd/initrd
