@@ -1,4 +1,9 @@
-*~
 .*.swp
-*.iso
+*~
 .DS_Store
+.DS_Store?
+.Trashes
+Thumbs.db
+
+# ignore the isos that we create
+*.iso
