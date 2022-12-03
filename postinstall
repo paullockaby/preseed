@@ -25,6 +25,7 @@ tar -z -x -C /tmp -f /tmp/postinstall.tar.gz
 
 # install global things and root things
 mkdir -m700 -p /root/.ssh
+cp /tmp/postinstall.d/resolv.conf /etc/resolv.conf
 cp /tmp/postinstall.d/apt.conf.d/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 cp /tmp/postinstall.d/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/20auto-upgrades
 cp /tmp/postinstall.d/vimrc /root/.vimrc

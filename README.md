@@ -51,6 +51,13 @@ I'm always having to look this up so here are the steps.
 
 Your thumb drive is now bootable.
 
+# Building a USB Boot Disk on Linux
+
+I'm also always having to look this up so here are the steps.
+
+1. Attach the USB disk. Use `lsblk` to see what the device label is that the USB disk has received.
+2. Write the ISO file to your USB disk: `sudo dd bs=4M if=preseed.iso of=/dev/XXX conv=fdatasync`
+
 # More Information
 
 These links are where I got most of the information for building this preseed script.
