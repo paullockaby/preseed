@@ -9,7 +9,7 @@ echo -n > /etc/motd
 DEBIAN_FRONTEND=noninteractive apt-get purge -y laptop-detect tasksel emacsen-common ienglish-common ispell
 
 # install some additional packages
-DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends linux-headers-amd64 cowsay openssh-server sudo xfsprogs time openssl gnutls-bin zip unzip bzip2 lynx vim vim-scripts curl whois net-tools patch telnet sqlite3 strace lsof less screen rsync git git-lfs dos2unix myrepos traceroute bash-completion socat busybox psmisc man-db dnsutils whowatch unattended-upgrades gpg-agent gnupg software-properties-common tcpdump make gzrt jq bash zsh htop dbus-user-session fuse3 acl python3-venv python3-pip python3-setuptools python3-wheel python3-psutil
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends linux-headers-amd64 openssh-server sudo time openssl gnutls-bin zip unzip bzip2 lynx vim vim-scripts curl whois net-tools patch telnet sqlite3 strace lsof less screen rsync git git-lfs dos2unix myrepos traceroute bash-completion socat busybox psmisc man-db dnsutils unattended-upgrades gpg-agent gnupg software-properties-common tcpdump make gzrt jq bash zsh htop dbus-user-session fuse3 acl python3-venv python3-pip python3-setuptools python3-wheel python3-psutil python3-pylibacl python3-sh python3-prometheus-client rdiff-backup xfsprogs smartmontools
 
 # members of `sudo` group are not asked for password.
 sed -i 's/^%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
@@ -25,7 +25,6 @@ tar -z -x -C /tmp -f /tmp/postinstall.tar.gz
 
 # install global things and root things
 mkdir -m700 -p /root/.ssh
-cp /tmp/postinstall.d/resolv.conf /etc/resolv.conf
 cp /tmp/postinstall.d/apt.conf.d/50unattended-upgrades /etc/apt/apt.conf.d/50unattended-upgrades
 cp /tmp/postinstall.d/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/20auto-upgrades
 cp /tmp/postinstall.d/vimrc /root/.vimrc
